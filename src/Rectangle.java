@@ -1,4 +1,4 @@
-public class Rectangle {
+public class Rectangle extends Shape {
     Point lowerLeft;
     Point topRight;
 
@@ -28,7 +28,7 @@ public class Rectangle {
         return topRight.getY();
     }
 
-    public boolean insideRect (Point p){
+    public boolean inside(Point p){
         Rectangle rect = this;
         if (p.getX() >= rect.getLowerX() && p.getY() >= rect.getLowerY() && p.getX() <= rect.getHigherX() && p.getY() <= rect.getHigherY()){
             return true;
