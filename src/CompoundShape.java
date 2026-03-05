@@ -1,14 +1,10 @@
-import java.util.Iterator;
-import java.util.Spliterator;
-import java.util.function.Consumer;
-
 public class CompoundShape extends Shape{
-    private class LinkedList{
+    private class LinkedShapes {
         //Probably a poor implementation of a linked list
-        Shape heldShape = null;
-        LinkedList nextLink = null;
+        Shape heldShape;
+        LinkedShapes nextLink = null;
 
-        LinkedList(Shape shape){
+        LinkedShapes(Shape shape){
             heldShape = shape;
         }
         void add(Shape shape){
@@ -16,29 +12,33 @@ public class CompoundShape extends Shape{
                 nextLink.add(shape);
             }
             else {
-                nextLink = new LinkedList(shape);
+                nextLink = new LinkedShapes(shape);
             }
         }
     }
 
-    LinkedList positiveShapes;
-    LinkedList negativeShapes;
+    private LinkedShapes positiveShapes;
+    private LinkedShapes negativeShapes;
 
     public CompoundShape(){
 
     }
 
     public void addPositiveShape(Shape shape){
+        if (shape == null) return;
+
         if (positiveShapes == null){
-            positiveShapes = new LinkedList(shape);
+            positiveShapes = new LinkedShapes(shape);
         }
         else {
             positiveShapes.add(shape);
         }
     }
     public void addNegativeShape(Shape shape){
+        if (shape == null) return;
+
         if (negativeShapes == null){
-            negativeShapes = new LinkedList(shape);
+            negativeShapes = new LinkedShapes(shape);
         }
         else {
             negativeShapes.add(shape);
@@ -49,7 +49,7 @@ public class CompoundShape extends Shape{
     @Override
     public boolean inside(Point point) {
         boolean inside = false;
-        LinkedList currentLink = positiveShapes;
+        LinkedShapes currentLink = positiveShapes;
         while (currentLink != null && !inside){
             //Check if inside a positive shape, the while loop will exit if there is no more shapes, or the point is in a shape.
             inside = currentLink.heldShape.inside(point);
@@ -66,4 +66,25 @@ public class CompoundShape extends Shape{
         }
         return inside;
     }
+
+    public int getNumbOfPositiveShapes(){
+        int count = 0;
+        LinkedShapes currentLink = positiveShapes;
+        while (currentLink != null){
+            count++;
+            currentLink = currentLink.nextLink;
+        }
+        return count;
+    }
+
+    public int getNumbOfNegativeShapes(){
+        int count = 0;
+        LinkedShapes currentLink = negativeShapes;
+        while (currentLink != null){
+            count++;
+            currentLink = currentLink.nextLink;
+        }
+        return count;
+    }
+
 }
